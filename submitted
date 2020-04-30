@@ -1,0 +1,493 @@
+# Header ------------------------------------------------------------------
+
+# PROJECT: Stanford RA project
+# AUTHOR: Brittany Mazzurco Muscato
+# DATE: 2020-04-29
+# STARTED AT: 3:30PM Eastern
+
+# PURPOSE: Stanford RA task
+
+# Setup -------------------------------------------------------------------
+
+# install.packages(c("tidyverse", "plotly"))
+
+library(tidyverse) # general data manipulation (includes dplyr, readr, purrr, ggplot2, tidyr)
+library(lubridate) # date manipulation
+library(plotly) # interactive plots
+library(lubridate)
+
+
+setwd("C:/Users/Brittany/Documents/Stanford/Task package")
+
+
+
+
+# ---------------------------------------------------------------------------
+# Load User datasets   -------------------------------------------------
+# ---------------------------------------------------------------------------
+
+# loading datasets -------------------------------------------
+dataset <- read.csv(
+  "file:///C:/Users/Brittany/Documents/Stanford/Task package/test_data.txt", 
+  na.strings=c("","NA"), stringsAsFactors = FALSE)
+
+
+data <- dataset
+data <- as_tibble(data) 
+
+
+# cleaning data -------------------------------------
+
+
+
+# converting ed_tc into datetime
+
+data$ed_tc <- gsub("jan","-01-", data$ed_tc)
+data$ed_tc <- gsub("feb","-02-", data$ed_tc)
+data$ed_tc <- gsub("mar","-03-", data$ed_tc)
+data$ed_tc <- gsub("apr","-04-", data$ed_tc)
+data$ed_tc <- gsub("may","-05-", data$ed_tc)
+data$ed_tc <- gsub("jun","-06-", data$ed_tc)
+data$ed_tc <- gsub("jul","-07-", data$ed_tc)
+data$ed_tc <- gsub("aug","-08-", data$ed_tc)
+data$ed_tc <- gsub("sep","-09-", data$ed_tc)
+data$ed_tc <- gsub("oct","-10-", data$ed_tc)
+data$ed_tc <- gsub("nov","-11-", data$ed_tc)
+data$ed_tc <- gsub("dec","-12-", data$ed_tc)
+
+data$ed_tc <- dmy_hms(data$ed_tc)
+view(data)
+
+
+# converting dcord_tc into datetime
+data$dcord_tc <- gsub("jan","-01-", data$dcord_tc)
+data$dcord_tc <- gsub("feb","-02-", data$dcord_tc)
+data$dcord_tc <- gsub("mar","-03-", data$dcord_tc)
+data$dcord_tc <- gsub("apr","-04-", data$dcord_tc)
+data$dcord_tc <- gsub("may","-05-", data$dcord_tc)
+data$dcord_tc <- gsub("jun","-06-", data$dcord_tc)
+data$dcord_tc <- gsub("jul","-07-", data$dcord_tc)
+data$dcord_tc <- gsub("aug","-08-", data$dcord_tc)
+data$dcord_tc <- gsub("sep","-09-", data$dcord_tc)
+data$dcord_tc <- gsub("oct","-10-", data$dcord_tc)
+data$dcord_tc <- gsub("nov","-11-", data$dcord_tc)
+data$dcord_tc <- gsub("dec","-12-", data$dcord_tc)
+
+data$dcord_tc <- dmy_hms(data$dcord_tc)
+view(data)
+
+# changing shiftid into datetime
+# converting dcord_tc into datetime
+data$shift <- data$shiftid
+data <- separate(data, col = shift, into = c("shift_date", "shift_time"), sep = "1982")
+
+data$shift_date <- gsub("jan","-01-1982", data$shift_date)
+data$shift_date <- gsub("feb","-02-1982", data$shift_date)
+data$shift_date <- gsub("mar","-03-1982", data$shift_date)
+data$shift_date <- gsub("apr","-04-1982", data$shift_date)
+data$shift_date <- gsub("may","-05-1982", data$shift_date)
+data$shift_date <- gsub("jun","-06-1982", data$shift_date)
+data$shift_date <- gsub("jul","-07-1982", data$shift_date)
+data$shift_date <- gsub("aug","-08-1982", data$shift_date)
+data$shift_date <- gsub("sep","-09-1982", data$shift_date)
+data$shift_date <- gsub("oct","-10-1982", data$shift_date)
+data$shift_date <- gsub("nov","-11-1982", data$shift_date)
+data$shift_date <- gsub("dec","-12-1982", data$shift_date)
+
+view(data)
+
+# time update: 4:16pm
+
+# adding shift start time
+data <- separate(data, col = shift_time, into = c("shift_start", "shift_end"), sep = "to")
+
+#converting to datetime
+data$shift_start <- gsub("12 a.m.","00:00:00", data$shift_start)
+data$shift_start <- gsub("12 p.m.","12:00:00", data$shift_start)
+data$shift_start <- gsub("11 p.m.","23:00:00", data$shift_start)
+data$shift_start <- gsub("11 a.m.","11:00:00", data$shift_start)
+data$shift_start <- gsub("10 a.m.","10:00:00", data$shift_start)
+data$shift_start <- gsub("10 p.m.","22:00:00", data$shift_start)
+data$shift_start <- gsub("1 a.m.","01:00:00", data$shift_start)
+data$shift_start <- gsub("2 a.m.","02:00:00", data$shift_start)
+data$shift_start <- gsub("3 a.m.","03:00:00", data$shift_start)
+data$shift_start <- gsub("4 a.m.","04:00:00", data$shift_start)
+data$shift_start <- gsub("5 a.m.","05:00:00", data$shift_start)
+data$shift_start <- gsub("6 a.m.","06:00:00", data$shift_start)
+data$shift_start <- gsub("7 a.m.","07:00:00", data$shift_start)
+data$shift_start <- gsub("8 a.m.","08:00:00", data$shift_start)
+data$shift_start <- gsub("9 a.m.","09:00:00", data$shift_start)
+data$shift_start <- gsub("1 p.m.","13:00:00", data$shift_start)
+data$shift_start <- gsub("2 p.m.","14:00:00", data$shift_start)
+data$shift_start <- gsub("3 p.m.","15:00:00", data$shift_start)
+data$shift_start <- gsub("4 p.m.","16:00:00", data$shift_start)
+data$shift_start <- gsub("5 p.m.","17:00:00", data$shift_start)
+data$shift_start <- gsub("6 p.m.","18:00:00", data$shift_start)
+data$shift_start <- gsub("7 p.m.","19:00:00", data$shift_start)
+data$shift_start <- gsub("8 p.m.","20:00:00", data$shift_start)
+data$shift_start <- gsub("9 p.m.","21:00:00", data$shift_start)
+data$shift_start <- gsub("noon","12:00:00", data$shift_start)
+view(data)
+
+data$shift_start_time <- paste(data$shift_date, "", data$shift_start)
+view(data)
+data$shift_start_time <- dmy_hms(data$shift_start_time)
+
+view(data)
+
+# adding shift start time
+data <- separate(data, col = shift_time, into = c("shift_start", "shift_end"), sep = "to")
+
+#converting to datetime
+data$shift_end <- gsub("12 a.m.","00:00:00", data$shift_end)
+data$shift_end <- gsub("12 p.m.","12:00:00", data$shift_end)
+data$shift_end <- gsub("11 p.m.","23:00:00", data$shift_end)
+data$shift_end <- gsub("11 a.m.","11:00:00", data$shift_end)
+data$shift_end <- gsub("10 a.m.","10:00:00", data$shift_end)
+data$shift_end <- gsub("10 p.m.","22:00:00", data$shift_end)
+data$shift_end <- gsub("1 a.m.","01:00:00", data$shift_end)
+data$shift_end <- gsub("2 a.m.","02:00:00", data$shift_end)
+data$shift_end <- gsub("3 a.m.","03:00:00", data$shift_end)
+data$shift_end <- gsub("4 a.m.","04:00:00", data$shift_end)
+data$shift_end <- gsub("5 a.m.","05:00:00", data$shift_end)
+data$shift_end <- gsub("6 a.m.","06:00:00", data$shift_end)
+data$shift_end <- gsub("7 a.m.","07:00:00", data$shift_end)
+data$shift_end <- gsub("8 a.m.","08:00:00", data$shift_end)
+data$shift_end <- gsub("9 a.m.","09:00:00", data$shift_end)
+data$shift_end <- gsub("1 p.m.","13:00:00", data$shift_end)
+data$shift_end <- gsub("2 p.m.","14:00:00", data$shift_end)
+data$shift_end <- gsub("3 p.m.","15:00:00", data$shift_end)
+data$shift_end <- gsub("4 p.m.","16:00:00", data$shift_end)
+data$shift_end <- gsub("5 p.m.","17:00:00", data$shift_end)
+data$shift_end <- gsub("6 p.m.","18:00:00", data$shift_end)
+data$shift_end <- gsub("7 p.m.","19:00:00", data$shift_end)
+data$shift_end <- gsub("8 p.m.","20:00:00", data$shift_end)
+data$shift_end <- gsub("9 p.m.","21:00:00", data$shift_end)
+data$shift_end <- gsub("noon","12:00:00", data$shift_end)
+view(data)
+
+data$shift_end_time <- paste(data$shift_date, "", data$shift_end)
+view(data)
+data$shift_end_time <- dmy_hms(data$shift_end_time)
+
+view(data)
+
+# End time: 4:45pm
+
+# adding variables for arrive before -------
+
+
+data$arrive_before <- (data$ed_tc < data$shift_start_time)
+data$leave_after <- (data$dcord_tc > data$shift_end_time)
+
+view(data)
+
+# time update 5:00
+# took 10 minute break
+
+# --------------------------------------------------
+# Question 0
+# --------------------------------------------------
+
+# Q0 summary tables --------------------
+descriptive_stats <- summary(data)
+print(descriptive_stats)
+
+view(descriptive_stats)
+
+# Q0 discussion  --------------------
+# There is an error in the data because some of the lengths of stays are negative
+
+# As such, I will remove  NAs
+data$xb_lntdc <- ifelse(data$xb_lntdc < 0, NA, data$xb_lntdc)
+view(data)
+
+# Time 5:24pm
+
+
+# --------------------------------------------------
+# QUESTION 1 --------------------
+# --------------------------------------------------
+
+# Q1 notes ----------------------------
+# Some patients may arrive before their physician's shift starts and therefore would have to wait.
+# Other patients may be discharged after their physician's shift ends.
+# What percentages fall in these categories?
+
+# Before shift starts --------------------------------------------------
+count(data, arrive_before == TRUE)
+# 650 patients are true (arrive before), 8181 patients are false (do not)
+
+650/(8181 + 650)
+# ANSWER: 7.36% of patients arrive before the physician's shift begins
+
+# After the shift ends --------------------------------------------------
+count(data, leave_after == TRUE)
+# 2448 patients are true (leaves after), while 6383 are false (do not)
+
+2448/(6383+2448)
+# ANSWER: 27.7% of patients leave after the physician's shift ends
+
+#checking to make sure they equal
+(2448+6383) == (8181+650)
+
+# Time: 5:35pm
+
+
+# --------------------------------------------------
+# QUESTION 2  --------------------
+# --------------------------------------------------
+
+#Q2 loading and cleaning data ------------
+q2 <- data
+q2$patient_arrival = q2$ed_tc
+q2 <- separate(q2, col = patient_arrival, into = c("patient_arrival_day", "patient_arrival_time"), sep = " ")
+q2$patient <- q2$patient_arrival_time
+q2 <- separate(q2, col = patient, into = c("patient_hour", "patient_minute", "patient_second"), sep = ":")
+view(q2)
+
+# Q2 creating table comparing just arrival hour and severity
+q2_filter <- q2 %>% drop_na(xb_lntdc) %>% group_by(patient_hour) %>% summarise(avg_xb_lntdc = mean(xb_lntdc))
+view(q2_filter)
+
+# Q2 patients by arrival hour ------------
+patients_by_time <- q2 %>%  
+  ggplot() +
+  aes(x = patient_hour, fill = xb_lntdc) +
+  geom_bar() +
+  theme_minimal() + 
+  labs(
+    title = "Patients by arrival hour",
+    x = NULL, 
+    y = NULL    
+  )
+
+patients_by_time
+
+# Q2 patient severity by arrival hour ------------
+patients_by_time_severity <- q2_filter %>%  
+  ggplot() +
+  aes(x = patient_hour, y = avg_xb_lntdc) +
+  geom_point() +
+  geom_line(alpha = 0.5) + 
+  geom_smooth(method = "lm", alpha = 0.5) +
+  theme_minimal() + 
+  labs(
+    title = "Patient severity by arrival hour",
+    x = NULL, 
+    y = NULL    
+  )
+
+patients_by_time_severity
+
+ggplotly(patients_by_time_severity)
+
+# Time 6:00pm
+
+# Q2 discussion ------------------
+# One way to approximate whether or not patient severity is predicted by hour
+# of day is would be to plot the log value of patient severity against time of day
+
+# For speed, I calculated the average log and plotted it against the time of day
+
+
+
+
+# --------------------------------------------------
+# QUESTION 3  --------------------
+# --------------------------------------------------
+
+# Q3 data compilation and cleaning ---------------------- 
+# Start time 6:15pm
+
+#limiting data set to only those still in care after shift ends
+shift <- data 
+
+shift$departure = shift$dcord_tc
+shift <- separate(shift, col = departure, into = c("departure_date", "departure_time"), sep = " ")
+shift$departure_date <- ymd(shift$departure_date)
+shift$shift_date <- dmy(shift$shift_date)
+
+# turning shift starts and ends into numeric
+shift$shift_hour_start <- gsub(":00:00","", shift$shift_start)
+shift$shift_hour_end <- gsub(":00:00","", shift$shift_end)
+shift$shift_hour_end <- as.numeric(shift$shift_hour_end)
+
+# turning departure time into numeric
+shift$departure_hour = shift$departure_time
+shift <- separate(shift, col = departure_hour, into = c("departure_hour", "departure_minute", "departure_second"), sep = ":")
+shift$departure_hour <- as.numeric(shift$departure_hour)
+view(shift)
+
+# creating index
+shift$index = 0
+view(shift)
+
+# creating difference in hours
+shift$time_difference <- (shift$departure_hour - shift$shift_hour_end)
+
+# populating index
+shift$index <- ifelse((shift$leave_after = TRUE) & shift$time_difference < -1, NA, shift$index)
+shift$index <- ifelse((shift$leave_after = TRUE) & shift$time_difference == -1, -1, shift$index)
+shift$index <- ifelse((shift$leave_after = TRUE) & shift$time_difference == 0, 0, shift$index)
+shift$index <- ifelse((shift$leave_after = TRUE) & shift$time_difference == 1, 1, shift$index)
+shift$index <- ifelse((shift$leave_after = TRUE) & shift$time_difference == 2, 2, shift$index)
+shift$index <- ifelse((shift$leave_after = TRUE) & shift$time_difference == 3, 3, shift$index)
+shift$index <- ifelse((shift$leave_after = TRUE) & shift$time_difference > 3, NA, shift$index)
+
+#shift$index <- ifelse((shift$departure_date >= shift$shift_date) & shift$time_difference > 3, NA, shift$index)
+
+view(shift)
+
+# Time: 7:45pm
+
+#filter dataset to just -1 to 4 hours
+shift <- shift %>% drop_na(index)
+
+#grouping by physician
+shift$visit_num <- as.numeric(shift$visit_num)
+
+# Q3 census ----------------- 
+census <- shift %>% group_by(phys_name, index) %>% count(phys_name, visit_num) %>% summarize(count = sum(n))
+view(census)
+
+# Finish time: 8:10pm
+
+# Discussion for Question 3 ------------------------------------
+# Discuss conceptually how you construct censuses and note issues with discete time
+
+# Censuses consist of data for an entire population
+
+# ISSUES: One of the primary issues working with discrete time regards its general
+# lack of statistical precision. Using time intervals is much less precise than using continuous time data.
+
+
+
+# --------------------------------------------------
+# QUESTION 4  --------------------
+# --------------------------------------------------
+
+# Q4 data compilation and cleaning ---------- 
+q4 <- data %>% drop_na(xb_lntdc)
+
+view(q4)
+q4$arrival = q4$ed_tc
+q4$tally = 1
+
+# generating arrival hours as numerics
+q4 <- separate(q4, col = arrival, into = c("arrival_date", "arrival_time"), sep = " ")
+q4 <- separate(q4, col = arrival_time, into = c("arrival_hour", "arrival_minute", "arrival_second"), sep = ":")
+q4$arrival_hour <- as.numeric(q4$arrival_hour)
+
+# counting average patients per hour
+count <- q4 %>% group_by(phys_name, arrival_hour) %>% count(phys_name, tally)
+q4_count <- left_join(q4, count, by = c("phys_name", "arrival_hour"))
+q4_count <- q4_count %>% rename(
+  patients_per_hour = n)
+view(q4_count)
+
+# calculating patients per shift
+avg_time<- q4_count %>% group_by(phys_name) %>% summarise(avg_xb_lntdc = mean(xb_lntdc))
+q4_count <- left_join(q4_count, avg_time, by = c("phys_name"))
+view(q4_count)
+
+shifts <- q4 %>% group_by(phys_name, shiftid) %>% count(phys_name, tally)
+q4_count <- left_join(q4_count, shifts, by = c("phys_name", "shiftid"))
+q4_count <- q4_count %>% rename(
+  patients_per_shift = n)
+view(q4_count)
+
+# Q4 regression models ---------------------- 
+
+# simple bivariate
+q4model_bivariate <- lm(formula = xb_lntdc ~ phys_name, data=q4_count)
+summary(q4model_bivariate)
+
+# basic controls 
+q4model_basic <- lm(formula = xb_lntdc ~ phys_name + arrive_before + patients_per_hour, data=q4_count)
+summary(q4model_basic)
+
+# additional controls
+q4model_additional <- lm(formula = xb_lntdc ~ phys_name + arrive_before + patients_per_hour + patients_per_shift + leave_after, data=q4_count)
+summary(q4model_additional)
+
+
+# Time: 8:15pm, took at 30 min break
+
+# Q4 solutions and discussion ------------------------------
+# After the regression: It appears as though Teresa is the fastest at discharging patients
+# The finding that Teresa is the fastest provider remains robust across multiple specifications.
+
+
+# With regard to control variables, I included a dummy variable indicating whether or not a patient arrived before
+# a physician's shift. This is because a patient who arrives before a doctor could *possibly* see
+# him/her is going to certainly have a longer wait time than a patient who arrives in the middle of a shift.
+# Unfortunately, whule this relationship was statistically significant, it was not in the
+# anticipated direction.
+
+# I decided to control for number of patients seen per hour, for I'm assuming that length-of stay 
+# is directly correlated with how long it takes to see a physician. If a physician is quite busy 
+# (i.e. seeing many) patients per hour, then it will take an individual patient longer to be attended to,
+# thus increasing his/her length of stay.
+# This relationship was statistically significant and in anticipated direction.
+
+# I also decided to control for patients seen per shift, for a similar reason. If a physician
+# is tending to many patients per shift, then he/she may accumulate a backlog. Furthermore,
+# fatigue could set in after seeing many patients in a shift, thus slowing the physician's ability to get
+# a patient out quickly.
+# Unfortunately, whule this relationship was statistically significant, it was not in the
+# anticipated direction.
+
+
+# Finally, I added a dummy variable indicating whether or not a patient arrived after a shift has ended.
+# I personally feel as though a doctor would be more compelled to get a patient in/out quickly if the doctor 
+# was already staying late at the hospital.
+# Unfortunately, whule this relationship was statistically significant, it was not in the
+# anticipated direction.
+
+# With regard to my concerns about doctors having a finite number of patients,
+# my concern is that there is an upper limit to our model per physician, but it may vary by physician.
+
+# Time: 9:20pm
+
+# Q4 Graphs ------------------------
+
+physician_avg <- q4_count %>% select(phys_name, avg_xb_lntdc) %>%
+  distinct() %>%
+  ggplot() +
+  geom_col() +
+  aes(x = reorder(phys_name, avg_xb_lntdc) , y = avg_xb_lntdc, fill = avg_xb_lntdc) +
+  theme(axis.text.x=element_text(angle = 45, vjust = 0.5)) +
+  labs(
+    title = "Physican by Average Length of Stay",
+    x = "Physician Name",
+    y = "Average Length of Stay (avg log length of stay)"
+  )
+
+physician_avg
+
+# however, it's not good practice to take an average of a log
+# So, I am redoing the chart with the minimum xb_lntdc to find the best time
+
+q4_min <- q4_count %>% group_by(phys_name) %>%
+  summarize(min_log = min(xb_lntdc))
+
+physician_log <- q4_min %>% 
+  ggplot() +
+  geom_col() +
+  aes(x = reorder(phys_name, min_log), y = min_log, fill = min_log) +
+  theme(axis.text.x=element_text(angle = 45, vjust = 0.5)) +
+  labs(
+    title = "Physican by Length of Stay",
+    x = "Physician Name",
+    y = "Fastest Length of Stay (log length of stay)"
+  )
+
+physician_log
+
+# Time: 10:20pm
+
+
+
+# Final time updates  ----------------------------
+# Spent an additional ~45 min editing and proofreading
